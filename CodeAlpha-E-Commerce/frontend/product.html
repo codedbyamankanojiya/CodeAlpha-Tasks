@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details — ApexBazaar</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <main class="apx-container" style="margin-top: 30px;">
+    
+    <!-- Breadcrumb -->
+    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+      <a href="/index.html" style="hover:color:var(--primary)">Home</a> / 
+      <span style="color: var(--text-main)" id="breadcrumb-product-name">Product Details</span>
+    </div>
+
+    <!-- Product Details Section -->
+    <section id="product-details-container">
+      <div class="apx-loader-container">
+        <div class="apx-loader"></div>
+      </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+      <h3>Customer Reviews & Feedback</h3>
+      
+      <div class="reviews-layout">
+        
+        <!-- Left: Write a Review Form -->
+        <div class="review-form-column">
+          <div class="apx-glass" style="padding: 24px;">
+            <h4 style="font-size: 1.15rem; margin-bottom: 16px; color: #fff;">Write a Customer Review</h4>
+            <form id="write-review-form" style="display: flex; flex-direction: column; gap: 16px;">
+              
+              <!-- Stars Rating Selector -->
+              <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Your Overall Rating:</label>
+                <div class="interactive-stars-group">
+                  <span class="interactive-star" data-value="1">★</span>
+                  <span class="interactive-star" data-value="2">★</span>
+                  <span class="interactive-star" data-value="3">★</span>
+                  <span class="interactive-star" data-value="4">★</span>
+                  <span class="interactive-star" data-value="5">★</span>
+                </div>
+                <input type="hidden" id="review-rating-input" value="0" />
+              </div>
+
+              <!-- Title -->
+              <div>
+                <label for="review-title" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Review Title:</label>
+                <input type="text" id="review-title" class="apx-input" placeholder="Summarize your experience..." style="width: 100%;" />
+              </div>
+
+              <!-- Comment Content -->
+              <div>
+                <label for="review-content" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Review Content:</label>
+                <textarea id="review-content" class="apx-input" placeholder="What did you like or dislike? How was the performance?" rows="5" style="width: 100%; resize: vertical;" required></textarea>
+              </div>
+
+              <!-- Mock Image Upload URL -->
+              <div>
+                <label for="review-image-url" style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Attach Product Photo (URL):</label>
+                <input type="url" id="review-image-url" class="apx-input" placeholder="https://example.com/your-image.jpg" style="width: 100%;" />
+              </div>
+
+              <button type="submit" class="apx-btn apx-btn-primary" style="width: 100%; height: 44px; margin-top: 10px;">Submit Review</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Right: Reviews List -->
+        <div class="reviews-list-column">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <h4 style="color: #fff; font-size: 1.1rem;" id="summary-reviews-count">0 reviews</h4>
+          </div>
+          <div id="reviews-list" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Loaded dynamically -->
+            <div class="apx-loader-container">
+              <div class="apx-loader"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Related Products -->
+    <section style="margin-top: 60px;">
+      <h3 style="font-size: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 8px; margin-bottom: 24px; color: #fff;">Related Products</h3>
+      <div id="related-products-grid" class="grid-container">
+        <!-- Loaded dynamically -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/productPage.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ApexBazaar — Premium Multi-Vendor Marketplace</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <!-- Main Content Wrapper -->
+  <main class="apx-container" style="margin-top: 30px;">
+    
+    <!-- Hero Banner Slider -->
+    <section class="hero-slider">
+      <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1600&q=80');">
+        <div class="hero-content">
+          <span class="hero-tag">Summer Tech Fest</span>
+          <h1 class="hero-title">Experience Pure Gaming Power</h1>
+          <p class="hero-desc">Get up to 30% off on premium laptops, mechanical keyboards, gaming gear and custom graphic cards.</p>
+          <a href="#catalog-section" class="apx-btn apx-btn-primary">Shop Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Circular Categories Horizontal Slider -->
+    <section class="categories-container">
+      <h2 style="font-size: 1.6rem; margin-bottom: 20px;">Browse Popular Categories</h2>
+      <div id="categories-slider" class="categories-wrapper">
+        <div class="apx-loader-container">
+          <div class="apx-loader"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catalog Section with Filters -->
+    <section id="catalog-section" style="margin-top: 50px;">
+      <h2 style="font-size: 1.6rem; margin-bottom: 20px;">Trending Products</h2>
+      
+      <!-- Filter Bar -->
+      <div class="apx-glass filter-bar">
+        <div class="filter-inputs-group">
+          <!-- Price filter -->
+          <div class="filter-input-field">
+            <span>Price:</span>
+            <input type="number" id="filter-min-price" class="apx-input" placeholder="Min (₹)" style="width: 100px;" />
+            <span>to</span>
+            <input type="number" id="filter-max-price" class="apx-input" placeholder="Max (₹)" style="width: 100px;" />
+          </div>
+
+          <!-- Sort filter -->
+          <div class="filter-input-field">
+            <span>Sort By:</span>
+            <select id="filter-sort" class="apx-select" style="width: 180px;">
+              <option value="createdAt-desc">New Arrivals</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="rating-desc">Customer Rating</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Filter Actions -->
+        <div class="filter-actions">
+          <button id="apply-filters-btn" class="apx-btn apx-btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">Apply</button>
+          <button id="clear-filters-btn" class="apx-btn apx-btn-secondary" style="padding: 10px 20px; font-size: 0.85rem;">Reset</button>
+        </div>
+      </div>
+
+      <!-- Products Grid Count Info -->
+      <div id="products-count" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 16px;">
+        0 Products Found
+      </div>
+
+      <!-- Main Products Grid -->
+      <div id="products-grid" class="grid-container">
+        <!-- Rendered dynamically -->
+        <div class="apx-loader-container" style="grid-column: 1 / -1;">
+          <div class="apx-loader"></div>
+        </div>
+      </div>
+
+      <!-- Pagination Container -->
+      <div id="pagination-controls" style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 40px;">
+        <!-- Rendered dynamically -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/indexPage.js"></script>
+</body>
+</html>

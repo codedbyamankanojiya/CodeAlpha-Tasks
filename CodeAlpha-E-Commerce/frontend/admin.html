@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - ApexBazaar</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+  <!-- Chart.js for beautiful graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons for premium UI icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 30px;
+      margin-top: 40px;
+      margin-bottom: 60px;
+      min-height: 70vh;
+    }
+    
+    /* Sidebar Navigation */
+    .admin-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 24px 16px;
+      height: fit-content;
+    }
+    
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: 1px solid transparent;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    
+    .sidebar-btn:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-main);
+    }
+    
+    .sidebar-btn.active {
+      background: var(--primary-glow);
+      color: var(--primary);
+      border-color: rgba(99, 102, 241, 0.2);
+    }
+    
+    /* Content Views */
+    .admin-view {
+      display: none;
+    }
+    
+    .admin-view.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+    
+    /* Dashboard Stats Card Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    .stat-card {
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 6px;
+      font-family: var(--font-heading);
+    }
+    
+    .stat-icon {
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--primary);
+    }
+    
+    /* Charts Wrapper */
+    .chart-container {
+      position: relative;
+      height: 350px;
+      width: 100%;
+      margin-top: 20px;
+    }
+    
+    /* Table Styling */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 20px;
+    }
+    
+    .apx-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    
+    .apx-table th {
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    
+    .apx-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+    
+    .apx-table tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+    
+    /* Status pills */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    
+    .badge-pending { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge-paid { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge-delivered { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge-shipped { background: rgba(14, 165, 233, 0.15); color: var(--secondary); }
+    .badge-failed { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .badge-cancelled { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    
+    /* Action Buttons */
+    .btn-icon-only {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+    
+    .btn-icon-only:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    
+    .btn-icon-only.delete:hover {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    /* Modal Form Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(11, 15, 25, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition);
+    }
+    
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    .modal-content {
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .form-span-2 {
+      grid-column: span 2;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 992px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <main class="apx-container">
+    <div class="admin-layout">
+      
+      <!-- Sidebar Nav -->
+      <aside class="apx-glass admin-sidebar">
+        <div style="padding: 0 16px 16px 16px; border-bottom: 1px solid var(--border-color); margin-bottom: 16px;">
+          <h3 style="color: #fff; font-size: 1.1rem;">🛡️ Management</h3>
+          <span style="font-size: 0.75rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">Admin Portal</span>
+        </div>
+        <button class="sidebar-btn active" data-view="overview">
+          <i data-lucide="bar-chart-3"></i> Sales Overview
+        </button>
+        <button class="sidebar-btn" data-view="products">
+          <i data-lucide="package"></i> Products CRUD
+        </button>
+        <button class="sidebar-btn" data-view="orders">
+          <i data-lucide="shopping-bag"></i> Order Control
+        </button>
+        <button class="sidebar-btn" data-view="users">
+          <i data-lucide="users"></i> User Accounts
+        </button>
+      </aside>
+
+      <!-- Main Panel Views -->
+      <section class="admin-content">
+        
+        <!-- View: Overview -->
+        <div id="view-overview" class="admin-view active">
+          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 24px;">Sales Overview & Analytics</h2>
+          
+          <div class="stats-grid">
+            <div class="apx-glass stat-card">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">TOTAL SALES</span>
+                <div id="stat-sales" class="stat-value">₹0</div>
+              </div>
+              <div class="stat-icon"><i data-lucide="indian-rupee"></i></div>
+            </div>
+            
+            <div class="apx-glass stat-card">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">TOTAL ORDERS</span>
+                <div id="stat-orders" class="stat-value">0</div>
+              </div>
+              <div class="stat-icon" style="color: var(--secondary);"><i data-lucide="shopping-cart"></i></div>
+            </div>
+
+            <div class="apx-glass stat-card">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">TOTAL PRODUCTS</span>
+                <div id="stat-products" class="stat-value">0</div>
+              </div>
+              <div class="stat-icon" style="color: var(--success);"><i data-lucide="box"></i></div>
+            </div>
+
+            <div class="apx-glass stat-card">
+              <div>
+                <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">TOTAL CUSTOMERS</span>
+                <div id="stat-users" class="stat-value">0</div>
+              </div>
+              <div class="stat-icon" style="color: var(--warning);"><i data-lucide="users"></i></div>
+            </div>
+          </div>
+          
+          <div class="apx-glass" style="padding: 24px; margin-bottom: 30px;">
+            <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+              <i data-lucide="trending-up" style="color: var(--primary);"></i> Revenue & Sales Trends
+            </h3>
+            <div class="chart-container">
+              <canvas id="salesChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Products CRUD -->
+        <div id="view-products" class="admin-view">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+            <h2 style="font-size: 1.8rem; color: #fff;">Product Inventory</h2>
+            <button id="add-product-btn" class="apx-btn apx-btn-primary" style="padding: 10px 20px; font-size: 0.85rem;">
+              <i data-lucide="plus"></i> Add New Product
+            </button>
+          </div>
+          
+          <div class="apx-glass" style="padding: 20px;">
+            <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+              <input type="text" id="product-search" class="apx-input" placeholder="Search product name or SKU..." style="flex:1; max-width: 400px; height: 40px;" />
+            </div>
+            
+            <div class="table-container">
+              <table class="apx-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>SKU</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-products-table-body">
+                  <!-- Filled dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Orders Management -->
+        <div id="view-orders" class="admin-view">
+          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 24px;">Order Status Control</h2>
+          
+          <div class="apx-glass" style="padding: 20px;">
+            <div class="table-container">
+              <table class="apx-table">
+                <thead>
+                  <tr>
+                    <th>Order Number</th>
+                    <th>Customer</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Order Status</th>
+                    <th>Payment Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-orders-table-body">
+                  <!-- Filled dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- View: Users Management -->
+        <div id="view-users" class="admin-view">
+          <h2 style="font-size: 1.8rem; color: #fff; margin-bottom: 24px;">User Account Control</h2>
+          
+          <div class="apx-glass" style="padding: 20px;">
+            <div class="table-container">
+              <table class="apx-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Store Name / Seller Profile</th>
+                    <th>Seller Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-users-table-body">
+                  <!-- Filled dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Add/Edit Product Modal -->
+  <div id="product-modal" class="modal-overlay">
+    <div class="apx-glass modal-content">
+      <button class="modal-close" id="modal-close-btn">&times;</button>
+      <h3 style="color: #fff; font-size: 1.4rem; margin-bottom: 24px;" id="modal-title">Add New Product</h3>
+      
+      <form id="product-form" class="form-grid">
+        <input type="hidden" id="form-product-id" />
+        
+        <div class="form-span-2">
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Product Name *</label>
+          <input type="text" id="form-product-name" class="apx-input" placeholder="e.g. iPhone 15 Pro Max" style="width:100%;" required />
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Brand</label>
+          <input type="text" id="form-product-brand" class="apx-input" placeholder="e.g. Apple" style="width:100%;" />
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Category *</label>
+          <select id="form-product-category" class="apx-input" style="width:100%; height:46px;" required>
+            <!-- Loaded dynamically -->
+          </select>
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Price (₹) *</label>
+          <input type="number" id="form-product-price" step="0.01" class="apx-input" placeholder="999.00" style="width:100%;" required />
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Compare At Price (₹)</label>
+          <input type="number" id="form-product-compare-price" step="0.01" class="apx-input" placeholder="1299.00" style="width:100%;" />
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">SKU *</label>
+          <input type="text" id="form-product-sku" class="apx-input" placeholder="e.g. IPH15PM-256-BLK" style="width:100%;" required />
+        </div>
+
+        <div>
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Stock Quantity *</label>
+          <input type="number" id="form-product-stock" class="apx-input" placeholder="50" style="width:100%;" required />
+        </div>
+
+        <div class="form-span-2">
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Description *</label>
+          <textarea id="form-product-description" class="apx-input" placeholder="Write premium description here..." style="width:100%; min-height: 100px; padding: 12px; border-radius: var(--radius-sm);" required></textarea>
+        </div>
+
+        <div class="form-span-2">
+          <label class="apx-label" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px;">Image URL *</label>
+          <input type="url" id="form-product-image" class="apx-input" placeholder="https://images.unsplash.com/photo-..." style="width:100%;" required />
+          <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Must be a unique Unsplash image URL to prevent marketplace duplicates.</span>
+        </div>
+
+        <div class="form-span-2" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+          <button type="button" class="apx-btn apx-btn-secondary" id="modal-cancel-btn" style="padding: 10px 20px;">Cancel</button>
+          <button type="submit" class="apx-btn apx-btn-primary" style="padding: 10px 20px;">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/adminPage.js"></script>
+</body>
+</html>

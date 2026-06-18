@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create an ApexBazaar Account</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <main class="apx-container" style="display:flex; align-items:center; justify-content:center; min-height: 80vh; padding: 40px 20px;">
+    
+    <div class="apx-glass" style="max-width: 500px; width: 100%; padding: 40px 30px;">
+      <h2 style="font-size: 1.8rem; font-family: var(--font-heading); color:#fff; text-align:center; margin-bottom: 8px;">Create Account</h2>
+      <p style="color:var(--text-muted); text-align:center; font-size:0.9rem; margin-bottom: 24px;">Join ApexBazaar to buy and review premium products</p>
+      
+      <form id="signup-form" style="display:flex; flex-direction:column; gap:14px;">
+        <!-- First & Last Name -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div>
+            <label for="signup-firstname" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom: 4px;">First Name</label>
+            <input type="text" id="signup-firstname" class="apx-input" placeholder="Aarav" style="width:100%;" required />
+          </div>
+          <div>
+            <label for="signup-lastname" style="display:block; font-size:0.8; font-weight:700; margin-bottom: 4px;">Last Name</label>
+            <input type="text" id="signup-lastname" class="apx-input" placeholder="Sharma" style="width:100%;" required />
+          </div>
+        </div>
+        
+        <!-- Email -->
+        <div>
+          <label for="signup-email" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom: 4px;">Email Address</label>
+          <input type="email" id="signup-email" class="apx-input" placeholder="aarav.sharma@example.com" style="width:100%;" required />
+        </div>
+
+        <!-- Phone -->
+        <div>
+          <label for="signup-phone" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom: 4px;">Phone Number (Optional)</label>
+          <input type="tel" id="signup-phone" class="apx-input" placeholder="+91 98765 43210" style="width:100%;" />
+        </div>
+        
+        <!-- Passwords -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+          <div>
+            <label for="signup-password" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom: 4px;">Password</label>
+            <input type="password" id="signup-password" class="apx-input" placeholder="Min. 6 chars" style="width:100%;" required />
+          </div>
+          <div>
+            <label for="signup-confirm" style="display:block; font-size:0.8rem; font-weight:700; margin-bottom: 4px;">Confirm Password</label>
+            <input type="password" id="signup-confirm" class="apx-input" placeholder="••••••••" style="width:100%;" required />
+          </div>
+        </div>
+
+        <button type="submit" class="apx-btn apx-btn-primary" style="width:100%; height:46px; margin-top: 10px; font-size: 0.95rem;">Create Account</button>
+      </form>
+
+      <div style="text-align:center; font-size:0.85rem; margin-top: 24px; color:var(--text-muted);">
+        Already have an account? <a href="/login.html" style="color:var(--primary); font-weight:600;">Sign in here</a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/authPages.js"></script>
+</body>
+</html>

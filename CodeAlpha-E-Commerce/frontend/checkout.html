@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout Secure Order — ApexBazaar</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <main class="apx-container" style="margin-top: 30px; min-height: 70vh; max-width: 900px;">
+    
+    <!-- Steps Tracker Indicators -->
+    <div class="checkout-steps-indicators">
+      <div class="step-node active" id="step-indicator-1"><span>1</span><label>Shipping</label></div>
+      <div class="step-line"></div>
+      <div class="step-node" id="step-indicator-2"><span>2</span><label>Delivery</label></div>
+      <div class="step-line"></div>
+      <div class="step-node" id="step-indicator-3"><span>3</span><label>Payment</label></div>
+      <div class="step-line"></div>
+      <div class="step-node" id="step-indicator-4"><span>4</span><label>Review</label></div>
+      <div class="step-line"></div>
+      <div class="step-node" id="step-indicator-5"><span>5</span><label>Confirm</label></div>
+    </div>
+
+    <!-- Active Step Container -->
+    <div id="checkout-step-container">
+      <div class="apx-loader-container">
+        <div class="apx-loader"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/checkoutPage.js"></script>
+</body>
+</html>

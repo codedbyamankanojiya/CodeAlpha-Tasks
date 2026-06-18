@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Wishlist — ApexBazaar</title>
+  <link rel="icon" type="image/png" href="/Favicon.png" />
+  <link rel="stylesheet" href="/src/css/styles.css" />
+</head>
+<body>
+
+  <!-- Injected Shared Header -->
+  <header id="global-header"></header>
+
+  <main class="apx-container" style="margin-top: 30px; min-height: 70vh;">
+    
+    <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">
+      <a href="/index.html" style="hover:color:var(--primary)">Home</a> / 
+      <span style="color: var(--text-main)">My Wishlist</span>
+    </div>
+
+    <h1 style="font-size: 2rem; color: #fff; margin-bottom: 24px;">Saved Wishlist</h1>
+
+    <!-- Wishlist Page Container (Injected dynamically) -->
+    <div id="wishlist-page-container">
+      <div class="apx-loader-container">
+        <div class="apx-loader"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Injected Shared Footer -->
+  <footer id="global-footer"></footer>
+
+  <!-- Scripts -->
+  <script type="module" src="/src/js/main.js"></script>
+  <script type="module" src="/src/js/wishlistPage.js"></script>
+</body>
+</html>
