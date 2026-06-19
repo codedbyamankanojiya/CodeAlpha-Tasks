@@ -17,6 +17,9 @@ class User extends Model {
       role: this.role,
       phone: this.phone,
       avatar: this.avatar,
+      gender: this.gender,
+      dateOfBirth: this.dateOfBirth,
+      bio: this.bio,
     };
     if (this.role === 'CUSTOMER') {
       obj.customerProfile = { 
@@ -70,7 +73,19 @@ User.init(
       allowNull: true,
     },
     avatar: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    gender: {
+      type: DataTypes.ENUM('MALE', 'FEMALE', 'OTHER', 'PREFER_NOT_TO_SAY'),
+      allowNull: true,
+    },
+    dateOfBirth: {
+      type: DataTypes.DATEONLY,
+      allowNull: true,
+    },
+    bio: {
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     role: {

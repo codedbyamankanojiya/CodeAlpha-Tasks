@@ -16,13 +16,16 @@ router.get('/profile', protect, async (req, res, next) => {
 // PUT /api/users/profile
 router.put('/profile', protect, async (req, res, next) => {
   try {
-    const { name, phone, avatar, storeName, storeDescription, businessEmail, businessPhone } = req.body;
+    const { name, phone, avatar, gender, dateOfBirth, bio, storeName, storeDescription, businessEmail, businessPhone } = req.body;
     const user = await User.findByPk(req.user.id);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     if (name) user.name = name;
     if (phone !== undefined) user.phone = phone;
     if (avatar !== undefined) user.avatar = avatar;
+    if (gender !== undefined) user.gender = gender;
+    if (dateOfBirth !== undefined) user.dateOfBirth = dateOfBirth;
+    if (bio !== undefined) user.bio = bio;
     if (user.role === 'SELLER') {
       if (storeName) user.storeName = storeName;
       if (storeDescription !== undefined) user.storeDescription = storeDescription;

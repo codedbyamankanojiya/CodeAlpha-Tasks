@@ -23,10 +23,14 @@
       <!-- Left: Sidebar Navigation -->
       <aside class="apx-glass profile-sidebar">
         <div class="profile-sidebar-user">
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="sidebar-avatar" alt="Avatar" />
+          <div class="avatar-upload-wrapper">
+            <img id="sidebar-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="sidebar-avatar" alt="Avatar" />
+            <label class="avatar-upload-btn" for="avatar-input">📷</label>
+            <input type="file" id="avatar-input" accept="image/*" style="display: none;" />
+          </div>
           <div>
-            <div class="sidebar-username">My Account</div>
-            <div class="sidebar-email">Manage your settings</div>
+            <div class="sidebar-username" id="sidebar-username">My Account</div>
+            <div class="sidebar-email" id="sidebar-email">Manage your settings</div>
           </div>
         </div>
 
@@ -55,6 +59,24 @@
                   <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom: 6px;">Phone Number</label>
                   <input type="tel" id="profile-phone" class="apx-input" style="width:100%;" />
                 </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom: 6px;">Gender</label>
+                  <select id="profile-gender" class="apx-input" style="width:100%;">
+                    <option value="">Select</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                    <option value="OTHER">Other</option>
+                    <option value="PREFER_NOT_TO_SAY">Prefer not to say</option>
+                  </select>
+                </div>
+                <div>
+                  <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom: 6px;">Date of Birth</label>
+                  <input type="date" id="profile-dob" class="apx-input" style="width:100%;" />
+                </div>
+              </div>
+              <div style="margin-bottom: 20px;">
+                <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom: 6px;">Bio</label>
+                <textarea id="profile-bio" class="apx-input" style="width:100%; min-height: 100px; resize: vertical;"></textarea>
               </div>
               <div style="margin-bottom: 20px;">
                 <label style="display:block; font-size:0.85rem; font-weight:700; margin-bottom: 6px;">Email Address (Cannot change)</label>

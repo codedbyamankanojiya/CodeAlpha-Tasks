@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupProfileFormSubmit();
   setupPasswordFormSubmit();
   setupTabSwitcher();
+  setupAvatarUpload();
 });
 
 function setupTabSwitcher() {
@@ -37,10 +38,27 @@ function loadProfileInfo() {
   const nameInput = document.getElementById('profile-name');
   const emailInput = document.getElementById('profile-email');
   const phoneInput = document.getElementById('profile-phone');
+  const genderInput = document.getElementById('profile-gender');
+  const dobInput = document.getElementById('profile-dob');
+  const bioInput = document.getElementById('profile-bio');
 
   if (nameInput) nameInput.value = user.name;
   if (emailInput) emailInput.value = user.email;
   if (phoneInput) phoneInput.value = user.phone || '';
+  if (genderInput) genderInput.value = user.gender || '';
+  if (dobInput) dobInput.value = user.dateOfBirth || '';
+  if (bioInput) bioInput.value = user.bio || '';
+
+  // Update sidebar
+  const sidebarAvatar = document.getElementById('sidebar-avatar-img');
+  const sidebarUsername = document.getElementById('sidebar-username');
+  const sidebarEmail = document.getElementById('sidebar-email');
+  
+  if (sidebarAvatar && user.avatar) {
+    sidebarAvatar.src = user.avatar;
+  }
+  if (sidebarUsername) sidebarUsername.textContent = user.name;
+  if (sidebarEmail) sidebarEmail.textContent = user.email;
 
   // Render Saved Addresses
   const addressContainer = document.getElementById('saved-addresses-list');
@@ -101,6 +119,11 @@ function setupProfileFormSubmit() {
     e.preventDefault();
     const name = document.getElementById('profile-name').value.trim();
     const phone = document.getElementById('profile-phone').value.trim();
+    const gender = document.getElementById('profile-gender').value || null;
+    const dateOfBirth = document.getElementById('profile-dob').value || null;
+    const bio = document.getElementById('profile-bio').value.trim() || null;
+    const user = getCurrentUser();
+    const avatar = user?.avatar;
 
     if (!name) {
       alert('Name is required.');
@@ -112,7 +135,7 @@ function setupProfileFormSubmit() {
     btn.innerText = 'Updating...';
 
     try {
-      const data = await api.put('/users/profile', { name, phone });
+      const data = await api.put('/users/profile', { name, phone, avatar, gender, dateOfBirth, bio });
       
       // Update local storage user profile
       localStorage.setItem('apx_user', JSON.stringify(data.user));
@@ -294,4 +317,40 @@ Thank you for shopping with ApexBazaar!
   document.body.appendChild(element);
   element.click();
   document.body.removeChild(element);
+}
+
+function setupAvatarUpload() {
+  const avatarInput = document.getElementById('avatar-input');
+  const sidebarAvatar = document.getElementById('sidebar-avatar-img');
+  
+  if (!avatarInput || !sidebarAvatar) return;
+  
+  avatarInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64 = event.target.result;
+      
+      // Update the UI first
+      sidebarAvatar.src = base64;
+      
+      // Then update the user profile
+      const user = getCurrentUser();
+      user.avatar = base64;
+      localStorage.setItem('apx_user', JSON.stringify(user));
+      
+      // Also update the server
+      try {
+        const data = await api.put('/users/profile', { avatar: base64 });
+        localStorage.setItem('apx_user', JSON.stringify(data.user));
+        alert('Avatar updated successfully!');
+      } catch (err) {
+        console.error(err);
+        alert('Failed to update avatar on server.');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
 }

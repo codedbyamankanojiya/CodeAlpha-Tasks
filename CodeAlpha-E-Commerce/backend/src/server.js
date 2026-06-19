@@ -10,9 +10,9 @@ const startServer = async () => {
     // 1. Establish database connection
     await connectDB();
     
-    // 2. Sync database schemas
+    // 2. Sync database schemas (alter to add new columns)
     console.log('🔄 Syncing PostgreSQL database models...');
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log('✔ Database models synced successfully.');
 
     // 3. Listen
