@@ -98,7 +98,8 @@ jest.mock('../models/Order', () => {
   return {
     create: jest.fn().mockResolvedValue(mockOrder),
     findAll: jest.fn().mockResolvedValue([mockOrder]),
-    findOne: jest.fn().mockResolvedValue(mockOrder)
+    findOne: jest.fn().mockResolvedValue(mockOrder),
+    findByPk: jest.fn().mockResolvedValue(mockOrder)
   };
 });
 
@@ -220,6 +221,32 @@ describe('ApexBazaar API Endpoints', () => {
       
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('cart');
+    });
+  });
+
+  // Orders tests
+  describe('Orders Flow', () => {
+    it('should create an order', async () => {
+      const res = await request(app)
+        .post('/api/orders')
+        .set('Authorization', `Bearer ${token}`)
+        .send({
+          items: [{ productId: 1, quantity: 2, price: 99.99 }],
+          shippingAddress: { name: 'Test Address', street: '123 Test St', city: 'Test City', state: 'TS', zip: '123456', country: 'Testland' },
+          paymentMethod: 'cod',
+          totalAmount: 200.00
+        });
+      expect(res.statusCode).toEqual(201);
+      expect(res.body).toHaveProperty('id');
+      expect(res.body).toHaveProperty('total');
+    });
+
+    it('should fetch user orders', async () => {
+      const res = await request(app)
+        .get('/api/orders')
+        .set('Authorization', `Bearer ${token}`);
+      expect(res.statusCode).toEqual(200);
+      expect(Array.isArray(res.body)).toBe(true);
     });
   });
 });

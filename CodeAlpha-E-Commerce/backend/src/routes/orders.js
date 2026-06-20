@@ -4,6 +4,7 @@ const OrderItem = require('../models/OrderItem');
 const Cart = require('../models/Cart');
 const CartItem = require('../models/CartItem');
 const Product = require('../models/Product');
+const User = require('../models/User');
 const { protect, requireRole } = require('../middleware/auth');
 
 const router = express.Router();
